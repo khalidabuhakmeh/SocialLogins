@@ -1,0 +1,27 @@
+@page
+@model SocialLogins.Pages.SignIn
+
+@*
+    4. A page that will display all login mechanism in the current application.
+    Slightly overkill since we only have GitHub, but we could add additional 
+    OpenID providers in the Startup.cs file.
+    
+    Look at Signin.cshtml.cs OnPost for 5.
+*@
+
+<div class="jumbotron">
+    <h1>Authentication</h1>
+    <p class="lead text-left">Sign in using one of these external providers:</p>
+
+    @foreach (var scheme in Model.Schemes.OrderBy(p => p.DisplayName))
+    {
+        <form asp-page="SignIn" method="post">
+            <input type="hidden" name="Provider" value="@scheme.Name" />
+            <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+
+            <button class="btn btn-lg btn-success m-1" type="submit">
+                Sign in using @scheme.DisplayName
+            </button>
+        </form>
+    }
+</div>

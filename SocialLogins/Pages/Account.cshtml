@@ -1,0 +1,74 @@
+@page
+@model SocialLogins.Pages.Account
+
+@{
+    var Uri = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/";
+}
+
+<h2>User Claims</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var claim in Model.Claims)
+    {
+        <tr>
+            <td>@claim.Type.Replace(Uri, string.Empty)</td>
+            <td>
+                @if (claim.Type == "access_token")
+                {
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="access-token">
+                                &#128065;
+                            </span>
+                        </div>
+                        <input id="access-token" 
+                               type="password" value="@claim.Value" 
+                               onclick="toggleVisibility(this)" 
+                               class="form-control" 
+                               title="click me to reveal password" />
+                    </div>
+                }
+                else
+                {
+                    @claim.Value                    
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (Model.GitHubUser is {})
+{
+    <h2>GitHub Octokit Response</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>@nameof(Model.GitHubUser.Bio)</td>
+            <td>@Model.GitHubUser.Bio</td>
+        </tr>
+        <tr>
+            <td>@nameof(Model.GitHubUser.Location)</td>
+            <td>@Model.GitHubUser.Location</td>
+        </tr>
+        <tr>
+            <td>@nameof(Model.GitHubUser.AvatarUrl)</td>
+            <td>
+                <img src="@Model.GitHubUser.AvatarUrl" alt="avatar"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+}
